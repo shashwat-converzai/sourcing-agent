@@ -1,0 +1,73 @@
+                +------------------------------+
+                |         RAW DATA INPUT       |
+                |------------------------------|
+                | - Candidates (CV, metadata)  |
+                | - Jobs (JD, skills, etc.)    |
+                +--------------+---------------+
+                               |
+                               v
+                +------------------------------+
+                |    VECTOR GENERATION LAYER   |
+                |------------------------------|
+                | For Candidates & Jobs:       |
+                |  - Semantic Embeddings       |
+                |  - Structured Features       |
+                |  - Unified Vector (112 dim)  |
+                +--------------+---------------+
+                               |
+                               v
+                +------------------------------+
+                |          CLUSTERING          |
+                |------------------------------|
+                | Candidate Clustering (KMeans)|
+                | Job Clustering (KMeans)      |
+                | Stores:                      |
+                |  - Cluster Centers           |
+                |  - Membership for each item  |
+                +--------------+---------------+
+                               |
+                               v
+                +------------------------------+
+                |     CLUSTER CORRELATION      |
+                |------------------------------|
+                | Compute cosine similarity     |
+                | between JobClusters &        |
+                | CandidateClusters → Matrix    |
+                |                              |
+                |  Correlation[jc][cc]         |
+                +--------------+---------------+
+                               |
+                               v
+                +------------------------------+
+                |     MATCHING ENGINE          |
+                |------------------------------|
+                | For a given Job or JobMeta:  |
+                |  1. Build job vector         |
+                |  2. Find nearest JobCluster  |
+                |  3. Get correlated           |
+                |     CandidateClusters        |
+                |  4. Pull candidates          |
+                |  5. Compute similarity       |
+                |  6. Sort and filter          |
+                +--------------+---------------+
+                               |
+                               v
+                +------------------------------+
+                |      AUTO-SOURCE AGENT       |
+                |------------------------------|
+                | - Set status=Recommended     |
+                | - Save JobCandidateMatch     |
+                | - Expose via API / CLI       |
+                +--------------+---------------+
+                               |
+                               v
+              +----------------------------------+
+              |     OUTPUT (API / UI Layer)      |
+              |----------------------------------|
+              | /api/match-candidates/           |
+              | → Returns best-fit candidates    |
+              |   with similarity scores         |
+              +----------------------------------+
+
+
+Please follow setup.sh to setup locally
